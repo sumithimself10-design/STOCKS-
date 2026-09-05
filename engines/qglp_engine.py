@@ -26,6 +26,32 @@ class QuarterlyRecord:
     dividend_payout_pct: float | None = None
 
 
+def compute_roce(
+    ebit: float | None,
+    invested_capital: float | None,
+    total_assets: float | None = None,
+    current_liabilities: float | None = None,
+) -> float | None:
+    """
+    ROCE = EBIT / Capital Employed, expressed as a percentage.
+    Prefers Yahoo's own 'Invested Capital' (~ Total Debt + Total Equity) as
+    the capital-employed denominator; falls back to Total Assets minus
+    Current Liabilities (the textbook definition) when Invested Capital
+    isn't available for a given quarter.
+    """
+    if ebit is None:
+        return None
+
+    capital_employed = invested_capital
+    if not capital_employed and total_assets is not None and current_liabilities is not None:
+        capital_employed = total_assets - current_liabilities
+
+    if not capital_employed:
+        return None
+
+    return round((ebit / capital_employed) * 100, 2)
+
+
 @dataclass
 class QGLPResult:
     quality_score: float

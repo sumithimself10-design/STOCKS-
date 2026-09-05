@@ -77,6 +77,24 @@ class QGLPScoreSnapshot(Base):
     composite_score: Mapped[float] = mapped_column(Float)
 
 
+class PERatioSnapshot(Base):
+    """
+    One row per stock per day the refresh job runs. This is what makes the
+    Price pillar's '5-year median PE' honest instead of a stand-in equal to
+    today's PE — it needs real accumulated history, which only exists once
+    this table has been fed by the daily cron for a while. Early on (first
+    days/weeks of running this in production) the median will just be
+    whatever's accumulated so far, which the API surfaces via a note.
+    """
+    __tablename__ = "pe_ratio_snapshots"
+    __table_args__ = (UniqueConstraint("stock_id", "snapshot_date", name="uix_stock_pe_date"),)
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    stock_id: Mapped[int] = mapped_column(ForeignKey("stocks.id"), index=True)
+    snapshot_date: Mapped[date] = mapped_column(Date, index=True)
+    pe_ratio: Mapped[float] = mapped_column(Float)
+
+
 class SimulatedTrade(Base):
     """A hypothetical 'what if I had bought this' call the user logs in the simulator."""
     __tablename__ = "simulated_trades"

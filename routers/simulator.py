@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.auth import require_api_key
 from app.db.database import get_db
 from app.db.models import SimulatedTrade, Stock
 from app.schemas.schemas import SimulatedTradeIn, SimulatedTradeOut
@@ -10,7 +11,7 @@ from app.services.data_fetcher import data_fetcher
 router = APIRouter(prefix="/api/v1/simulator", tags=["Simulator"])
 
 
-@router.post("/trades", response_model=SimulatedTradeOut)
+@router.post("/trades", response_model=SimulatedTradeOut, dependencies=[Depends(require_api_key)])
 async def log_trade(trade: SimulatedTradeIn, db: AsyncSession = Depends(get_db)):
     normalized = data_fetcher.normalize_ticker(trade.ticker, "NSE")
     stock = (await db.execute(select(Stock).where(Stock.ticker == normalized))).scalar_one_or_none()

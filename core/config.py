@@ -14,10 +14,12 @@ class Settings(BaseSettings):
 
     database_url: str = "sqlite+aiosqlite:///./finai.db"
     redis_url: str = "redis://localhost:6379/0"
+    frontend_origin: str = "http://localhost:3000"
 
     # External data
     news_api_key: str | None = None
     gemini_api_key: str | None = None
+    simulator_api_key: str | None = None  # set in prod; None disables auth (local dev only)
 
     # Caching / throttling — Indian data sources punish hammering
     price_cache_ttl_seconds: int = 60 * 15          # 15 min for quotes

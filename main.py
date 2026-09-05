@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import get_settings
 from app.db.database import Base, engine
-from app.routers import fundamentals, qglp, simulator, stocks, technical
+from app.routers import fundamentals, news, qglp, simulator, stocks, technical
 
 settings = get_settings()
 
@@ -22,7 +22,7 @@ app = FastAPI(title=settings.app_name, lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Next.js dev server; add prod domain at deploy time
+    allow_origins=[settings.frontend_origin],  # set FRONTEND_ORIGIN env var to your Vercel URL in prod
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -32,6 +32,7 @@ app.include_router(qglp.router)
 app.include_router(technical.router)
 app.include_router(fundamentals.router)
 app.include_router(simulator.router)
+app.include_router(news.router)
 
 
 @app.get("/health")
