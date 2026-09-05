@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  font-family: "Courier New", ui-monospace, SFMono-Regular, Menlo, monospace;
+  background-color: #040706;
+  color: #39ff88;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* Faint digital grid, like the dash cluster's segmented panels */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(57, 255, 136, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(57, 255, 136, 0.05) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* Slow scanline sweep, subtle rather than gimmicky */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(57, 255, 136, 0.03) 50%, transparent 100%);
+  background-size: 100% 6px;
+  animation: scan 9s linear infinite;
+}
+
+@keyframes scan {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 600px; }
+}
+
+#__next, main, header, footer {
+  position: relative;
+  z-index: 1;
+}
+
+.glow-text {
+  text-shadow: 0 0 6px rgba(57, 255, 136, 0.55);
+}
+
+.glow-text-red {
+  text-shadow: 0 0 6px rgba(255, 59, 48, 0.55);
+}
+
+.crt-panel {
+  background: linear-gradient(180deg, rgba(10, 15, 12, 0.9), rgba(4, 7, 6, 0.95));
+  border: 1px solid #123021;
+}
+
+::selection {
+  background: rgba(57, 255, 136, 0.25);
+}
+
+input::placeholder {
+  color: #1c7a4a;
+}
