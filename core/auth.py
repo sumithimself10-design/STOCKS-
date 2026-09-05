@@ -11,7 +11,7 @@ opening this up to other people's simulator data.
 """
 from fastapi import Header, HTTPException
 
-from app.core.config import get_settings
+from core.config import get_settings
 
 settings = get_settings()
 

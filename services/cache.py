@@ -3,7 +3,7 @@ from typing import Any
 
 import redis.asyncio as redis
 
-from app.core.config import get_settings
+from core.config import get_settings
 
 settings = get_settings()
 _redis = redis.from_url(settings.redis_url, decode_responses=True)

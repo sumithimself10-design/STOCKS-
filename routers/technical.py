@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.db.database import get_db
-from app.engines.technical_engine import TechnicalEngine
-from app.schemas.schemas import TechnicalSignalOut
-from app.services.data_fetcher import data_fetcher
-from app.services.price_repository import get_price_series
+from db.database import get_db
+from engines.technical_engine import TechnicalEngine
+from schemas.schemas import TechnicalSignalOut
+from services.data_fetcher import data_fetcher
+from services.price_repository import get_price_series
 
 router = APIRouter(prefix="/api/v1/technical", tags=["Technical"])
 engine = TechnicalEngine()

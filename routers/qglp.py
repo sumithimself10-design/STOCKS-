@@ -1,14 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.config import get_settings
-from app.db.database import get_db
-from app.engines.qglp_engine import QGLPEngine
-from app.schemas.schemas import QGLPBreakdown
-from app.services.cache import cache_get, cache_set
-from app.services.data_fetcher import data_fetcher
-from app.services.financial_mapper import to_quarterly_records
-from app.services.price_repository import get_pe_median
+from core.config import get_settings
+from db.database import get_db
+from engines.qglp_engine import QGLPEngine
+from schemas.schemas import QGLPBreakdown
+from services.cache import cache_get, cache_set
+from services.data_fetcher import data_fetcher
+from services.financial_mapper import to_quarterly_records
+from services.price_repository import get_pe_median
 
 router = APIRouter(prefix="/api/v1/qglp", tags=["QGLP"])
 settings = get_settings()

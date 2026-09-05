@@ -2,11 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.auth import require_api_key
-from app.db.database import get_db
-from app.db.models import SimulatedTrade, Stock
-from app.schemas.schemas import SimulatedTradeIn, SimulatedTradeOut
-from app.services.data_fetcher import data_fetcher
+from core.auth import require_api_key
+from db.database import get_db
+from db.models import SimulatedTrade, Stock
+from schemas.schemas import SimulatedTradeIn, SimulatedTradeOut
+from services.data_fetcher import data_fetcher
 
 router = APIRouter(prefix="/api/v1/simulator", tags=["Simulator"])
 

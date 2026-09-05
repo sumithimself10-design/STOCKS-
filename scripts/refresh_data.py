@@ -19,11 +19,11 @@ from sqlalchemy import select
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 
-from app.core.config import get_settings
-from app.db.database import AsyncSessionLocal
-from app.db.models import PERatioSnapshot, PriceBar, QuarterlyFinancial, Stock
-from app.services.data_fetcher import data_fetcher
-from app.services.financial_mapper import get_interest_expense, to_quarterly_records
+from core.config import get_settings
+from db.database import AsyncSessionLocal
+from db.models import PERatioSnapshot, PriceBar, QuarterlyFinancial, Stock
+from services.data_fetcher import data_fetcher
+from services.financial_mapper import get_interest_expense, to_quarterly_records
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

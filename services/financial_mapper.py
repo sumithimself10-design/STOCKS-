@@ -8,7 +8,7 @@ Field names below were verified against yfinance's own source
 that's why "EBIT"/"EBITDA" stay upper-case while everything else is
 title-cased with spaces inserted at lower-to-upper transitions.
 """
-from app.engines.qglp_engine import QuarterlyRecord, compute_roce
+from engines.qglp_engine import QuarterlyRecord, compute_roce
 
 
 def to_quarterly_records(df) -> list[QuarterlyRecord]:

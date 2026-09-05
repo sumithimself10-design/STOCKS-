@@ -6,7 +6,7 @@ on its own (the frontend fundamentals tab doesn't need a full QGLP recompute).
 from dataclasses import dataclass
 from statistics import median
 
-from app.engines.qglp_engine import QuarterlyRecord
+from engines.qglp_engine import QuarterlyRecord
 
 
 @dataclass

@@ -1,8 +1,8 @@
 import httpx
 from fastapi import APIRouter, HTTPException
 
-from app.core.config import get_settings
-from app.services.cache import cache_get, cache_set
+from core.config import get_settings
+from services.cache import cache_get, cache_set
 
 router = APIRouter(prefix="/api/v1/news", tags=["News"])
 settings = get_settings()

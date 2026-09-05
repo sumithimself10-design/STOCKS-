@@ -3,9 +3,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.core.config import get_settings
-from app.db.database import Base, engine
-from app.routers import fundamentals, news, qglp, simulator, stocks, technical
+from core.config import get_settings
+from db.database import Base, engine
+from routers import fundamentals, news, qglp, simulator, stocks, technical
 
 settings = get_settings()
 

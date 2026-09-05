@@ -4,27 +4,29 @@ Two services deploy separately: the FastAPI backend (Railway or Render) and
 the Next.js frontend (Vercel). Postgres and Redis are managed add-ons, not
 things you run yourself.
 
-## 0. Unzip and push to GitHub
+## 0. Sync this into your existing repo
+
+You already have a repo with the earlier version of these files pushed. From
+the same local clone:
 
 ```bash
-unzip fin_ai_pro_v2_backend.zip
-cd fin_ai_pro_v2
-git init
-git add .
-git commit -m "Initial backend + frontend scaffold"
+cd path/to/your/existing/repo
+# unzip fin_ai_pro_v2.zip and copy its contents in, overwriting existing files
+git add -A
+git commit -m "Add DB-backed price cache, real PE history, ROCE fix, simulator auth"
+git push
 ```
 
-Create a new empty repo on GitHub (don't initialize it with a README), then:
+If you don't have it cloned locally anymore:
 
 ```bash
-git remote add origin https://github.com/<your-username>/finai-pro-india.git
-git branch -M main
-git push -u origin main
+git clone https://github.com/<your-username>/<your-repo-name>.git
+cd <your-repo-name>
+# unzip fin_ai_pro_v2.zip here, overwrite existing files, then:
+git add -A
+git commit -m "Add DB-backed price cache, real PE history, ROCE fix, simulator auth"
+git push
 ```
-
-The zip contains both `app/` (backend) and `frontend/` (frontend) in one
-repo — Railway/Render and Vercel each let you point at a subfolder, so one
-repo is fine, you don't need to split it.
 
 ## 1. Provision Postgres + Redis
 
@@ -44,14 +46,15 @@ a `DATABASE_URL` and a `REDIS_URL` — that's all that matters for the next step
    - `FRONTEND_ORIGIN` — leave as `http://localhost:3000` for now, you'll update it after step 4 gives you the Vercel URL
    - `NEWS_API_KEY` — from newsapi.org (free tier is enough to start)
    - `GEMINI_API_KEY` — if you're using Gemini for anything on the backend
+   - `SIMULATOR_API_KEY` — make up any strong random string (e.g. `openssl rand -hex 16`). This gates writes to the simulator; without it set, anyone can log trades against your API.
 5. Under **Settings → Deploy**, set:
    - Build command: `pip install -r requirements.txt`
-   - Start command: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+   - Start command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
 6. Deploy. Once it's live, open the generated `*.up.railway.app` URL + `/health` — you should see `{"status": "ok", ...}`.
 7. Seed the stock universe once, using Railway's one-off command runner (Service → the three-dot menu → **Run a command**, or `railway run` via the CLI):
    ```bash
-   python -m app.scripts.seed_stocks
-   python -m app.scripts.refresh_data
+   python -m scripts.seed_stocks
+   python -m scripts.refresh_data
    ```
    `refresh_data` takes a few minutes for 30 tickers (it deliberately paces itself to avoid throttling) — that's expected.
 
@@ -60,7 +63,9 @@ a `DATABASE_URL` and a `REDIS_URL` — that's all that matters for the next step
 1. Go to vercel.com, **Add New → Project**, import the same GitHub repo.
 2. Set **Root Directory** to `frontend`.
 3. Framework preset should auto-detect as Next.js — leave build/output settings default.
-4. Under **Environment Variables**, add `NEXT_PUBLIC_API_URL` = your Railway backend URL from step 2.6 (e.g. `https://finai-backend-production.up.railway.app`).
+4. Under **Environment Variables**, add:
+   - `NEXT_PUBLIC_API_URL` — your Railway backend URL from step 2.6 (e.g. `https://finai-backend-production.up.railway.app`)
+   - `NEXT_PUBLIC_SIMULATOR_API_KEY` — the exact same value you set for `SIMULATOR_API_KEY` on the backend
 5. Deploy. Vercel gives you a `*.vercel.app` URL.
 
 ## 4. Close the loop on CORS
@@ -72,7 +77,7 @@ Go back to Railway → backend service → Variables → set `FRONTEND_ORIGIN` t
 `refresh_data.py` needs to run daily (after NSE market close is enough).
 On Railway: **+ New → Cron Job** in the same project, pointed at the same
 repo/root, with:
-- Command: `python -m app.scripts.refresh_data`
+- Command: `python -m scripts.refresh_data`
 - Schedule: `30 11 * * 1-5` (11:30 UTC = 5:00 PM IST, weekdays)
 
 This runs as a separate one-off container, not inside your always-on API

@@ -12,8 +12,8 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from statistics import median
 
-from app.db.models import PERatioSnapshot, PriceBar, Stock
-from app.services.data_fetcher import data_fetcher
+from db.models import PERatioSnapshot, PriceBar, Stock
+from services.data_fetcher import data_fetcher
 
 logger = logging.getLogger(__name__)
 

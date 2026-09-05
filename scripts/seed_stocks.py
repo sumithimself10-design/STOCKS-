@@ -9,9 +9,9 @@ import asyncio
 
 from sqlalchemy import select
 
-from app.data.nse_universe import NSE_UNIVERSE
-from app.db.database import AsyncSessionLocal, Base, engine
-from app.db.models import Stock
+from data.nse_universe import NSE_UNIVERSE
+from db.database import AsyncSessionLocal, Base, engine
+from db.models import Stock
 
 
 async def seed() -> None:

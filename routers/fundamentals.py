@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.db.database import get_db
-from app.engines.fundamentals_engine import FundamentalsEngine
-from app.schemas.schemas import FundamentalsOut
-from app.services.data_fetcher import data_fetcher
-from app.services.financial_mapper import get_interest_expense, to_quarterly_records
-from app.services.price_repository import get_pe_median
+from db.database import get_db
+from engines.fundamentals_engine import FundamentalsEngine
+from schemas.schemas import FundamentalsOut
+from services.data_fetcher import data_fetcher
+from services.financial_mapper import get_interest_expense, to_quarterly_records
+from services.price_repository import get_pe_median
 
 router = APIRouter(prefix="/api/v1/fundamentals", tags=["Fundamentals"])
 engine = FundamentalsEngine()

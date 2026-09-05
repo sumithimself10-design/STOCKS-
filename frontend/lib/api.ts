@@ -85,7 +85,12 @@ export const api = {
   }) => {
     const res = await fetch(`${API_BASE}/api/v1/simulator/trades`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...(process.env.NEXT_PUBLIC_SIMULATOR_API_KEY
+          ? { "X-API-Key": process.env.NEXT_PUBLIC_SIMULATOR_API_KEY }
+          : {}),
+      },
       body: JSON.stringify(trade),
     });
     if (!res.ok) throw new Error("Failed to log trade");
